@@ -14,4 +14,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Override @EntityGraph(attributePaths = {"users"})
     List<Room> findAll();
+
+    @Query("select r from Room r join fetch r.amenities a join fetch r.roomConfigures c where r.id = :id")
+    Room SelectForDelete(@Param("id") Long id);
 }

@@ -36,4 +36,9 @@ public class RoomApiController {
     @DeleteMapping("/room/delete/{roomId}")
     public void DeleteRoom(@PathVariable("roomId") Long id) { roomRepository.deleteById(id); }
 
+    @PutMapping("/room/update/{roomId}")
+    public void UpdateRoom(@PathVariable("roomId") Long id, @RequestBody UpdateRequestRoomDto request) {
+        roomService.updateRoom(id, request);
+    }
+
 }

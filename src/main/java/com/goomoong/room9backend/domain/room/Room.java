@@ -75,4 +75,27 @@ public class Room {
 
         return room;
     }
+
+    public void modifyRoom(UpdateRequestRoomDto request) {
+
+        this.limited = request.getLimit();
+        this.price = request.getPrice();
+        this.title = request.getTitle();
+        this.content = request.getContent();
+        this.detailLocation = request.getDetailLocation();
+        this.modifiedDate = LocalDateTime.now();
+        this.rule = request.getRule();
+        this.charge = request.getAddCharge();
+
+        this.getRoomConfigures().removeAll(this.getRoomConfigures());
+        for (confDto confDto : request.getConf()) {
+            this.getRoomConfigures()
+                    .add(new RoomConfiguration(confDto.getConfType(), confDto.getCount()));
+        }
+
+        this.getAmenities().removeAll(this.getAmenities());
+        for (String facility : request.getFacilities()) {
+            this.getAmenities().add(facility);
+        }
+    }
 }
