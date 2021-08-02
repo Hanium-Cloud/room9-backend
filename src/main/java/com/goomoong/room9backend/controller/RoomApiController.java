@@ -5,6 +5,7 @@ import com.goomoong.room9backend.Service.RoomService;
 import com.goomoong.room9backend.domain.room.Room;
 import com.goomoong.room9backend.domain.room.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,4 +32,8 @@ public class RoomApiController {
 
         return new roomData(rooms.size(), rooms);
     }
+
+    @DeleteMapping("/room/delete/{roomId}")
+    public void DeleteRoom(@PathVariable("roomId") Long id) { roomRepository.deleteById(id); }
+
 }

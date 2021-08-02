@@ -1,5 +1,6 @@
 package com.goomoong.room9backend.domain.room;
 
+import com.goomoong.room9backend.domain.room.dto.UpdateRequestRoomDto;
 import com.goomoong.room9backend.domain.room.dto.confDto;
 import com.goomoong.room9backend.domain.user.User;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -23,13 +25,16 @@ public class Room {
     @JoinColumn(name = "user_id")
     private User users;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "Room_Id")
-    private Set<AmenityEntity> amenities = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "Room_Amenity",
+            joinColumns = @JoinColumn(name = "Room_Id"))
+    @Column(name = "Facility")
+    private Set<String> amenities = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "Room_Id")
-    private Set<ConfEntity> roomConfigures = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "Room_Configuration",
+            joinColumns = @JoinColumn(name = "Room_Id"))
+    private Set<RoomConfiguration> roomConfigures = new HashSet<>();
 
     private LocalDateTime createdDate; // 올린 날짜
     private LocalDateTime modifiedDate; // 수정한 날짜
@@ -63,9 +68,10 @@ public class Room {
         room.charge = charge;
         room.liked = 0;
 
-        for (confDto conf : confs) { room.getRoomConfigures().add(new ConfEntity(conf)); }
+        for (confDto conf : confs) { room.getRoomConfigures()
+                .add(new RoomConfiguration(conf.getConfType(), conf.getCount())); }
 
-        for (String facility : facilities) { room.getAmenities().add(new AmenityEntity(facility)); }
+        for (String facility : facilities) { room.getAmenities().add(facility); }
 
         return room;
     }
