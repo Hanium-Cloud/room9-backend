@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter @Setter
 @NoArgsConstructor
 @Table(name = "reviews")
 @Entity
-public class Review{
+public class Review extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
@@ -31,8 +30,6 @@ public class Review{
 
     private String reviewContent;
 
-    private LocalDateTime reviewCreated;
-
     private int reviewScore;
 
     @Builder
@@ -41,14 +38,12 @@ public class Review{
         this.user = user;
         this.room = room;
         this.reviewContent = reviewContent;
-        this.reviewCreated = LocalDateTime.now();
         this.reviewScore = reviewScore;
     }
 
     public void update(String reviewContent, int reviewScore) {
         this.reviewContent = reviewContent;
         this.reviewScore = reviewScore;
-        this.reviewCreated = LocalDateTime.now();
     }
 
 }
